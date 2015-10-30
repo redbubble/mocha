@@ -112,10 +112,14 @@ module Mocha
         !(Class === mod)
       end
 
-      if possible_prepended_modules.any?
+      if possible_prepended_modules.any? || aliased?
         @definition_target = PrependedModule.new
         stubbee.__metaclass__.__send__ :prepend, @definition_target
       end
+    end
+
+    def aliased?
+      @original_method.original_name != @original_method.name
     end
 
     def definition_target
